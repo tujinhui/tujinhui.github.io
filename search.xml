@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>DOCKER安装</title>
+      <link href="/2021/10/12/%E8%BF%90%E7%BB%B4-DOCKER-DOCKER%E5%AE%89%E8%A3%85/"/>
+      <url>/2021/10/12/%E8%BF%90%E7%BB%B4-DOCKER-DOCKER%E5%AE%89%E8%A3%85/</url>
+      
+        <content type="html"><![CDATA[<h2 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h2><h3 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h3><h4 id="查看内核"><a href="#查看内核" class="headerlink" title="查看内核"></a>查看内核</h4><p>Docker 要求 CentOS 系统的内核版本高于 3.10 ，查看本页面的前提条件来验证你的CentOS 版本是否支持 Docker 。</p><p>通过 <strong>uname -r</strong> 命令查看你当前的内核版本</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ uname -r</span><br></pre></td></tr></table></figure><h4 id="yum-更新到最新版本"><a href="#yum-更新到最新版本" class="headerlink" title="yum 更新到最新版本"></a>yum 更新到最新版本</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum update</span><br></pre></td></tr></table></figure><h4 id="卸载旧版本（如果安装过旧版本的话）"><a href="#卸载旧版本（如果安装过旧版本的话）" class="headerlink" title="卸载旧版本（如果安装过旧版本的话）"></a>卸载旧版本（如果安装过旧版本的话）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum remove docker  docker-common docker-selinux docker-engine</span><br></pre></td></tr></table></figure><h4 id="安装需要的软件包"><a href="#安装需要的软件包" class="headerlink" title="安装需要的软件包"></a>安装需要的软件包</h4><p><strong>yum-util</strong> 提供yum-config-manager功能，另外两个是devicemapper驱动依赖的</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install -y yum-utils device-mapper-persistent-data lvm2</span><br></pre></td></tr></table></figure><h4 id="设置yum源"><a href="#设置yum源" class="headerlink" title="设置yum源"></a>设置yum源</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure><p><img src="https://i.loli.net/2021/10/12/hJjldZQ9ULt1Rpw.png" alt="image.png" loading="lazy"></p><h3 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h3><h4 id="查看所有docker版本"><a href="#查看所有docker版本" class="headerlink" title="查看所有docker版本"></a>查看所有docker版本</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yum list docker-ce --showduplicates | sort -r</span><br></pre></td></tr></table></figure><p><img src="https://i.loli.net/2021/10/12/YBqF9k6Ad8TVJmI.png" alt="image.png" loading="lazy"></p><h4 id="安装docker-1"><a href="#安装docker-1" class="headerlink" title="安装docker"></a>安装docker</h4><p>由于repo中默认只开启stable仓库，故这里安装的是最新稳定版<strong>17.12.0</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install docker-ce-17.12.0.ce</span><br></pre></td></tr></table></figure><p><img src="https://i.loli.net/2021/10/12/26xEIDwlYW9LAtj.png" alt="image.png" loading="lazy"></p><h4 id="启动并加入开机启动"><a href="#启动并加入开机启动" class="headerlink" title="启动并加入开机启动"></a>启动并加入开机启动</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl start docker</span><br></pre></td></tr></table></figure><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl <span class="built_in">enable</span> docker</span><br></pre></td></tr></table></figure><h4 id="验证是否安装成功"><a href="#验证是否安装成功" class="headerlink" title="验证是否安装成功"></a>验证是否安装成功</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker version</span><br></pre></td></tr></table></figure><p><img src="https://i.loli.net/2021/10/12/6mJkdP1St8OrFD4.png" alt="image.png" loading="lazy"></p><h3 id="设置优化"><a href="#设置优化" class="headerlink" title="设置优化"></a>设置优化</h3><h4 id="修改仓库地址"><a href="#修改仓库地址" class="headerlink" title="修改仓库地址"></a>修改仓库地址</h4><p>进入/etc/docker<br>修改为阿里云镜像<br>进入阿里云镜像加速页面：<br>修改/etc/docker/daemon.json文件配置，没有则新建；</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/docker/daemon.json</span><br></pre></td></tr></table></figure><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [<span class="string">"https://72idtxd8.mirror.aliyuncs.com"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h4 id="重启daemon"><a href="#重启daemon" class="headerlink" title="重启daemon"></a>重启daemon</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl daemon-reload</span><br></pre></td></tr></table></figure><h4 id="重启docker服务"><a href="#重启docker服务" class="headerlink" title="重启docker服务"></a>重启docker服务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl  restart docker</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 软件 </category>
+          
+          <category> 运维 </category>
+          
+          <category> DOCKER </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> DOCKER </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>VSFTPD安装</title>
+      <link href="/2021/10/12/%E8%BF%90%E7%BB%B4-DOCKER-VSFTPD/"/>
+      <url>/2021/10/12/%E8%BF%90%E7%BB%B4-DOCKER-VSFTPD/</url>
+      
+        <content type="html"><![CDATA[<h1 id="部署安装vsftpd"><a href="#部署安装vsftpd" class="headerlink" title="部署安装vsftpd"></a>部署安装vsftpd</h1><p><strong>需求：</strong>能够使客户端在防火墙未关闭的情况下外网连接使用ftp服务，因为客户端防火墙未关闭，所以lftp客户端需要使用被动模式。</p><p><strong>方法：</strong>在阿里云上使用docker搭建部署vsftpd服务</p><p><strong>说明：</strong>vsftpd属于FTP服务</p><h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><p>详细步骤请看 <a href="aa">阿斯蒂芬</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 软件 </category>
+          
+          <category> 运维 </category>
+          
+          <category> DOCKER </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> DOCKER </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>项目管理-禅道</title>
+      <link href="/2021/10/11/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86-%E7%A6%85%E9%81%93/"/>
+      <url>/2021/10/11/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86-%E7%A6%85%E9%81%93/</url>
+      
+        <content type="html"><![CDATA[<h1 id="禅道基本使用方法"><a href="#禅道基本使用方法" class="headerlink" title="禅道基本使用方法"></a>禅道基本使用方法</h1><p>地址：[http://<em>.</em>.<em>.</em>:8090]</p><p>管理员的账号密码</p><p>账号：admin</p><p>密码：admin</p><h2 id="添加帐号"><a href="#添加帐号" class="headerlink" title="添加帐号"></a>添加帐号</h2><p>· 打开 组织&gt;用户 &gt;添加用户 页面；</p><p>· 在添加用户表单中填写新用户信息；</p><p>· 保存用户信息； </p><p><img src="https://i.loli.net/2021/10/11/McGfPsBrwy9jIpE.png" alt="image.png" loading="lazy"></p><h2 id="创建产品"><a href="#创建产品" class="headerlink" title="创建产品"></a>创建产品</h2><p>· 打开 产品 &gt;添加产品 页面；</p><p>· 在表单中填写要创建的产品信息；</p><p>· 保存产品信息。</p><p><img src="https://i.loli.net/2021/10/11/ExrVRZsj54UMoAG.png" alt="image.png" loading="lazy"></p><h2 id="创建需求"><a href="#创建需求" class="headerlink" title="创建需求"></a>创建需求</h2><p>· 打开 产品 &gt;需求 &gt;添加需求 页面；</p><p>· 在表单中填写要创建的需求信息；</p><p>· 保存项目信息；</p><p><img src="https://i.loli.net/2021/10/11/sSemv5hy1uGbcDf.png" alt="img" loading="lazy"> </p><h2 id="创建项目，关联产品，设置团队"><a href="#创建项目，关联产品，设置团队" class="headerlink" title="创建项目，关联产品，设置团队"></a>创建项目，关联产品，设置团队</h2><p>· 打开 项目 &gt;添加项目 页面；</p><p>· 在表单中填写要创建的项目信息；</p><p>· 保存项目信息；</p><p>创建项目的入口有多个：</p><p>1.进入项目视图，点击左侧1.5级导航下拉菜单，可以直接点击“添加项目”。</p><p>2.或者先进入所有项目页面，点击右侧的“添加项目”按钮。</p><p>3.再或者在项目主页中的项目总览区块中也有“添加项目”按钮。</p><p><img src="https://i.loli.net/2021/10/11/2nWQbMIfmg8seaE.png" alt="image.png" loading="lazy"></p><p>进入项目添加的页面后，在这个页面设置项目名称、代号、起止时间、可用工作日、团队名称、项目目标和项目描述等字段。其中关联产品是可以为空的。</p><p><img src="https://i.loli.net/2021/10/11/4EqrjhpJFu3GzQV.png" alt="image.png" loading="lazy"></p><p>· 和我们前面讲述的简使用流程有一点区别就是在添加项目的时候，需要关联下产品，可以多选。</p><p>· 项目可以控制它的访问权限，分为默认、私有和自定义白名单三种。</p><p>创建项目点击保存按钮，会提示项目创建成功，然后可以选择设置团队。或者从项目视图中的团队菜单，也可以进行项目的团队管理。</p><p>在维护项目团队的时候，需要选择都是哪些用户可以参与到这个项目中，同时需要设置这个用户在本项目中的角色（角色可以随便设置，比如风清扬，冬瓜一号等）。可用工作日和可用工时每天需要仔细设置。通常来讲，一个人不可能每天8小时投入，也不可能一星期七天连续投入。设置完毕之后，系统会自动计算这个项目总得可用工时。</p><p><img src="https://i.loli.net/2021/10/11/8UC4AhlPxrNv3Yz.png" alt="image.png" loading="lazy"></p><h2 id="关联需求"><a href="#关联需求" class="headerlink" title="关联需求"></a>关联需求</h2><p>· 打开 项目 &gt; 需求 &gt;关联需求 页面；</p><p>· 在需求列表中勾选要关联的需求；</p><p>· 保存关联的需求信息；</p><p><img src="https://i.loli.net/2021/10/11/PQOogp2KyT3tbSz.png" alt="image.png" loading="lazy"></p><h2 id="分解任务"><a href="#分解任务" class="headerlink" title="分解任务"></a>分解任务</h2><p>· 打开 项目 &gt;需求 &gt;分解任务 页面；</p><p>· 在表单中填写任务信息；</p><p>· 保存任务信息；</p><p><img src="https://i.loli.net/2021/10/11/ixmK3zawCHo8A42.png" alt="image.png" loading="lazy"></p><p><img src="https://i.loli.net/2021/10/11/hRCiLX59VEmkMe3.png" alt="image.png" loading="lazy"></p><h2 id="创建bug"><a href="#创建bug" class="headerlink" title="创建bug"></a>创建bug</h2><p>· 打开 测试 &gt;Bug &gt;提Bug；</p><p>· 在表单中填写Bug信息；</p><p>· 保存Bug信息；</p><p><img src="https://i.loli.net/2021/10/11/kBJ5ZFayLf9uKeE.png" alt="image.png" loading="lazy"></p><p><img src="https://i.loli.net/2021/10/11/86g4IQP9eyvsWnE.png" alt="image.png" loading="lazy"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 软件 </category>
+          
+          <category> 项目管理 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 项目管理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>每一个遇见的人，都会教你一些道理</title>
+      <link href="/2020/05/24/ganxieyujian/"/>
+      <url>/2020/05/24/ganxieyujian/</url>
+      
+        <content type="html"><![CDATA[<div id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">  <div class="hbe-input-container">  <input type="password" id="hbePass" placeholder="" />    <label for="hbePass">Hey, password is required here.</label>    <div class="bottom-line"></div>  </div>  <script id="hbeData" type="hbeData" data-hmacdigest="3757322cf0f20d110463c9aef461f6dd8cce9cd18f879d9ab605221b1033c056">ffe3b66fefd1947a587174697b7ab8e0b449aa95c24f94e77d55b9aa7b7ea225fcf86597d8645bd082cb42e6feffee4a292b81232c27e1be4668bf0dccf9876b78ecc40717c6f937e29eb6a4802de863f071d17d1a4b59d2e461546643d1ed4e9d53a03c83db1320b0cd934c0081c3fad38e6bde3837c4295ac5e51df30b1dc9d9321025bd6a85619df1eadedf9fb522f140e21cd8da77dbbd3ea08bd4167dab91e378425a5ca052889ba52afbda2b6c18395da2893f0852f35cc8c9913395b2ad4e1a569f572beea784acef5991745e152cef9ef98e94c7861d310d863697b2df2cf2f72cec3cf3529a20d1d52ef09bcf3567d55b39eceefcaef4b8c0226a9e05e9f212c7ad89a1b4147adb1760905bc4f01e0087ea71459edad4f0da6f1833776e2e6d488e691e5ec6332dd24464772ebd497716f6cbeb62a5808928e750698430d9f6fde55bdeeb965ff2237a6f2dd38d559573c4e6c774ae830e2a25e0a7743c21b861a307483f45924efeed99b5d0fc9191487847a7da8a41e57a37ed983719d721525bf93c4958c27f818c4e4fda6f9b201e639538e225b39610619aef9d391468c6585c4eaed95dd5a56f77964a60a1a48e8cd2896dec252aa1dc2970654d5f7832440617c1e3f154811b00033f1b7b847fda10d1a3afdfe5c44337c33cfadb09ffbf6a411dfd6938aabd06b9adca8d765c1808a3709151b958aa42e6b9cd24d93503248d5baf82576c74c571a70f342da0fe737da133ec11b5738875b7fd57eb262c4d1711435f45a5b6dc1f6aaea9206daee6e7532c651958aaf27351ecfc0e1485cc19f320f41a794cdef5c70adc1d026871080c18c5baa1ced7d14748408fab2b34d002db23cc9fe38322eec0470a81e86b08c9648d8d7232b2ae65eabd2ebe504f7a5003629eb0de96629be2ce2a49f269b04cb4ddbcabf4881edfe1d46f8a22d720de3e5af935ab370eec03560d986c2e030310354bb4c3e720239e751ec9317750d6e2d237f04f8f27a999a053059c2bd5f748813f078d91cd051ec2e3b57389a0d11e1cb3f822ee5c2d87d2a76f9378ba107708d898adcb311fc6c0ae279fc9d36f5bc93bc65234f6294cf8860d91b582976d7aa00f4b5068f61ab033b0d2739c7161d844d70bed525280bd22e65a4e8ca75426d22a06ed3bae5956a68565c43099d36c2c1643260ed0149941884092376094d1406216bccc585f5f4e21b2a49895ed1d9d8be41c9c304126786c023bebbbc3451f26f23eb270f940a762e03a71c99bf5841a2f9e936d0237395ab757fbc2e1057e7405b28d318e0a291c6b5754391ae6b0f14b6b785b1d42b14dee4c78ccf97b45da5bfeae3c673ab38f4428bc5b8dc3629766e69f02e1f96894501e07d420440ead8b417e6b273529021ac32c0b06530d70ca9c15d9df5d8e4e15fd30b88c29f35ff0c4899fbd782d042559d063d832b2fc760c64472b14ff85f26d21836007190fa22a6278340874e7fc4e81e135573a2b3e125956d7298dbfb72543998292d182f4c4d507bf66c979e23ed0ad1722ea6b91c4eb914f7746304852d450f572d3088f38298de9477222fbb8ed51bda86f344ee2521364669f42d3ceb971072a4482fbd59a5f6be78a9c4df92416d16439505a593f47012b5f3ff290089ab0e87fb66913972961a341d642e502da15fdc5fcfe54bf06206eb5bb49e728ada32eec76f29b80039cc58c807a27c5541ca5d37359d50d91636b76da1fce6975d6c7cfc8b2ccd6ccff4b911039e3b37b4bfb18b4a44edc9ba81136122a2cf24474bddff6569e6e357263201b8458fb367544941d0ae290348e877a61c818f4a9ed27a411b69f198acf1b9cc533499586a75ec298c576cb544ec7332e20389f1b47593e9a6b93158e287bff62b3d59bb0d634e98d03ebbe0a5efec0143f889be42f5a8a7e8a78b773b7b8020fdd9bc24895534b87cc6cc6511d7329042088ea3877f0c5e4d35bce</script></div><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
+      
+      
+      <categories>
+          
+          <category> 生活 </category>
+          
+          <category> 情感 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 个人生活感悟 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>为什么对一个人越好就越不被在乎？这是我听过最让人心酸的回答。</title>
+      <link href="/2020/05/19/yichang-buzaihu/"/>
+      <url>/2020/05/19/yichang-buzaihu/</url>
+      
+        <content type="html"><![CDATA[<h1 id="为什么对一个人越好就越不被在乎？这是我听过最让人心酸的回答。"><a href="#为什么对一个人越好就越不被在乎？这是我听过最让人心酸的回答。" class="headerlink" title="为什么对一个人越好就越不被在乎？这是我听过最让人心酸的回答。"></a>为什么对一个人越好就越不被在乎？这是我听过最让人心酸的回答。</h1><p>一禅小和尚：师父，为什么对一个人越好，他越不在乎自己呢？</p><p>师父：你跋山涉水去见的人，不会记得你，他只会记得自己跋山涉水见过的人，付出的痛苦越深，珍惜的程度才会越深</p><p>一禅小和尚：那是不是，不该喜欢的那么满？</p><p>师父：爱一个人最好的方式，是经营好自己，给对方一个优质的爱人，而不是拼命，对一个人好，那人就会拼命爱你，你对他有价值，你的付出才会被重视，爱，也难免，如此现实。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 生活 </category>
+          
+          <category> 情感 </category>
+          
+          <category> 一禅小和尚 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 一禅小和尚 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>因为在乎</title>
+      <link href="/2020/05/16/yinweizaihu/"/>
+      <url>/2020/05/16/yinweizaihu/</url>
+      
+        <content type="html"><![CDATA[<div id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">  <div class="hbe-input-container">  <input type="password" id="hbePass" placeholder="" />    <label for="hbePass">Hey, password is required here.</label>    <div class="bottom-line"></div>  </div>  <script id="hbeData" type="hbeData" data-hmacdigest="bdfa0d3fb22e521cf1f80594b6335f16352996035dd0eeaa30b59a098a9082b2">c43dcbf2ede24a5bea9fe9a7b69b3b709b8d2e61d3f49bb41203056f8e8d05e02b985dc0cf8588e0c88d941501b5badd2d902355ec178f7343f3eecda08b5507f4a0aa50ee7d380d03f20268512e34d55deac528d31e87ef180fc3f2f9746f523dd3c65cd16a7d4610b153e8456ace82fc1937551d419dcd1ae0b872cc11c0825a2fad5080f0200700aa0081458c26acedfd410ce086e81d91bd053c5ab9e8b304f104941f4c99b5f6f7a878ffd507ecab0d1c1a7b7b7480f3c6da9b6cce08ffa722856e323fd16bff89487b83bbfb20e14bf9fbcc1fc740a592e193fd2117e5546dfbd8156f0c147a0885b8ae57754b8907ed683b5b7214dd2140baedfff57ace9bbb965bc274ab89605ac7a812cc1ca6745d08fd882f5cb40515446e056ec846763030830a2d5422cc820120083c4acfd202d5bdb0d30fa6182da13e952e3ccdaefc3366e8a4748bba175d5883bcab13965a31083ac3dfe0b427bb0a505ac95acc2d8c9017ceb82e57f08a725cdc3434cda53dd8c9fd711a561d5c0946cf2c9176f66ad6c3904605643163a8c5f203d51de4be441f0af302ad657d4dece49d307ba4ae61b75e73d5f4bd3fd4c3cfb5123bc4b121218363e73bab053cc1fcf44f1ed57dfb3521d129817aa3558a1cf6</script></div><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
+      
+      
+      <categories>
+          
+          <category> 生活 </category>
+          
+          <category> 情感 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 个人生活感悟 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>沐雪夕月</title>
+      <link href="/2020/05/14/muxuexiyue/"/>
+      <url>/2020/05/14/muxuexiyue/</url>
+      
+        <content type="html"><![CDATA[<div id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">  <div class="hbe-input-container">  <input type="password" id="hbePass" placeholder="" />    <label for="hbePass">Hey, password is required here.</label>    <div class="bottom-line"></div>  </div>  <script id="hbeData" type="hbeData" data-hmacdigest="a6ded0f83fee9c79bd93218668d54f2563710062c68d5c00ea215717004bc3db">7db216b57604f3c35b7d68616a1d2d3446abd30e885fd6b22791ffebeaeb113455dad7c0d4db3237fe100947a7ebeb2196b0ad86a6cdeda4e342c6342c3689f2da6ffcb232dd460cf63d4274602f1c826149a62d0436686a99ea8e23bbc88c50f3ff89132aa4bbebd4288ced211947cbe3a5b8d29414a4de83f3a06c2a1ddf90b75013f555835fa675152b11c2a98da19bd70bb5a1637ce0e8183309c8c04784271dc3d37312256559bc923895238098ae825cb295da5e229552fd2090107d1095d390e907395fe60771111b439e908d7cd392c060bf8fcbcc75b635550ffffa6c237bc57a044720f3c791caddf1e4d2e400a15b277b3c476d179af700a9b2663b472f60fd8b323527993347eba45d3b8ff925a86c6421b92815b8e46f1649056309cfa070859e50a15d9257ef36cd15152c3e79b5130d9a34b3fb42fd5218cfe824ae94c48f96e1f852e95e317c8e8ea3fc0390ce638f0a7dad7b2528f6da5fd5c9074b904f676c0c0fec972a295b6b1982e09d9950f6e251a313f6fed3163a6eb7eccbf39359069df9fe45b366841c991c4afed9c192cbb26634aac08c8e44068dd06e645098f53d56b49e177610c8ad321e4772fa76ce8a4eefa45b568b5cf7521ae8ab49e4aad6ac2c9765e4fe5a10400cc395cefb8770c7e3744f0ce25b182baf7b8e51c7a38632962b5cdf764ce71b1ca0f6ede79fe5c0edec722b6492b8851b54d9920daf1eee983525f5f7a35acbc295d9313b379c2bb161f23a7a0a8f5c42dacba0a929a2da2429d22a9e5f1cb70d5f3c8128b9d16cbda4491a0125</script></div><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
+      
+      
+      <categories>
+          
+          <category> 生活 </category>
+          
+          <category> 情感 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 个人生活感悟 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>陪安东尼度过漫长岁月</title>
+      <link href="/2020/05/03/gaobai/"/>
+      <url>/2020/05/03/gaobai/</url>
+      
+        <content type="html"><![CDATA[<div id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="Oh, these decrypted content cannot be verified, but you can still have a look.">  <div class="hbe-input-container">  <input type="password" id="hbePass" placeholder="" />    <label for="hbePass">Hey, password is required here.</label>    <div class="bottom-line"></div>  </div>  <script id="hbeData" type="hbeData" data-hmacdigest="a3277de64a329bb6e4e6364e77a06e5ca50f5efccfbf14cecdb06e7c203f1802">4bbb37f50cad7499c11e3b157e606eb528314a3b8c787aaac69ec26026d841d2b1d6f6a00b836760f4339f8be6c15e99a3b2f1d1715a02f188eedd20b14492c4c1d68e7b461c3a1ae9e7234af0e8f36eb1d0d118ab93faca98f0a2d02ef61995218027f284c3450e406d1d8454811b96b0b768b83c2f955c70d0ff871febf13c2ee9611f401e69a6e6e20685ffaa3bea7ebe860a5e02afed5d6f723c16af8a8fba5d658152f09b2851868d4686ad6985b5aefc215f7d3c3f36c1f11c2824850c52d98cfad92cf13174f523f2dc52e6f36ca69fb81c5dd0a2a87ea149ad1f85028be1b0f93faa9d845a3923a2dc7f835616fde5eb26f6d7c781c3c79550980fb3458bbd2db6f884fea1141e0a5560c9d1b37792e172417b0f0437ae4fcf46e411edaa117d041ddaf422504abfc961f6ac5d2884c4ac45432119956123ee4a44e13da1905ae6f483ac96809c4ece26a8f38d944b52aa8601210ce965e77922334eb349694a3eafe15e1a47d761d23ee8b3e8fd4e1417b4d9b53f5f606fdcec522292ff043b86db48ef67fa4b1819f356dd6e5400586be7aa3ef70c10bb6fdcc58b9f0e9576dadc6b3e206fee11b0b084ec783fc64478b9c638e2a6d68f1cfa27c092998f25573942d502beffc70b512c510c6e8672f7e086f373475a0f91df018cc726763a21898ea2447c3f4bdbbaaa709d65bb8f634bcb68b1fac44c3669079e7717335a2eedbffca8eb41abf97253878c3fabed1105852cbe3d2f068ef28fc4b7c0b9d493616b3301aa9dfdbb90089a545aba93f3b2c6afe58766840c587acf44de5f98cb6b3ff8e62fc44cf0c63050dca86f1c53f7c2712723addc4a17c50f6b158b370ef1beeacef915477de57b48ff43e4d49c30dac7dc299a345a25b259004df387f06698b892957095ed20cacd544c999be5e922b4ebfd2f550f3939989bee5761b717f58ba0b74df2b3e645d111cf30f7e2d6e3a8e5d1d76cbf84ef8e958e051658551bb3b64ff201dd8e8a035292a3c1e36c633d7abf4bc40434bbd57e417b6befaecac5da11e0aa7c228ad47749bbfaaefa1c10910fd6b202c6e92d150d81785de980488b06fa0373e28fff9ce8c51dbf0fb3218e141a9df8b1edd412f47a18ad6d5ce89427d9cdccf681be0384fc48e17023bc95c400bc6d36b71edac2a215668f3fe1a81b5f8c507646f34f7a13979b8aaab48416b95716be849f38833b63d873031f298117bfa6130462a9cbe2e6d1772cf7f44f344fee48f8cf129afb223beeb9620541edc360ce4ff379df8559e7aa35c1f683a7d11a09f2507e62512e2d3035739a5989c8c5c48f50950b32eb448ef748ff5d56dddf2e093f328d9228d08e3ea12f321a081853cf4f7e8cb85787eb0ccab7925cdf970ce545644fcb74bd31f33ac538a72cc2450b716aba2f3821ce9be8d8f5c3112ee15d1063aa73b2e9f8a436c25f791fdebf529d58d96fa3fbf385a825302098f268ae93ad6765a78f9f516562d471d9b993b37fd21d693dc83aa43ef65760efb6f4ffc10909d90355a1378e069675fdaca43fc65476e97caeed29aee34334b4b7416c62ec727db2e9b6e326700e20665aadcbf88965e8af6174acb6b7390b9d49d024954bcfe0a444e09eed3160c94bac7794f85512b83e6b05e922d48c2906ed0fd0561f8a99058c9ccd554d038691a9b5000ee0aaab20b6cea13f57d2edd97b2c7d1ca75e97664b7a6f186c1418b3ade147e411c19f18e9f976ebeca330ba529de197b2feeb036a1f52e6e0ddfd2c5d34743cfe93e5015c9e50b5c333970da7fd2a3c0974d813805ecd37f0d9723fe62f66cc7220af7fbde28a762aab6814bd0cffede3011e26468b6e3310bd669352d328e60797facf0999e78c73eddb78308c2828b1706021a9d5ecccc2405117b7cb503bc8dbf21b0a1aec5b9b211789b102127f8c5e6ad24e0681f921c017656b0769e0ea37fd5e4725d0eaa002446804f7f0b9faa587b45df654458e6c0d34a4c7ae41819fb88f1a3db8f3fab59fb1e9f58f88ae69f2a55ca4687db8ee019ad176c08a785c0442ba8decc6d015d37d9905aca5dbb9a8ba05a961a01cb2f481d0228d54c7b4336c1e84baef8d391fba48fc7f23c5b57468be097b0f620bbeb13b76748c687c6f8421a035a1a8c2211bc45f1c99ae414cdcebeea8f7cc432644887d3ca48e2766964c6ce0ea0b562a2b5ab528d7536f925d74f6240447ead99973ef5d2ccbb2bf31394cbf7dcfd22113c615cbd5e5a539e38d8cf689fd124ab981384442bea983a6f40ad97eef389dff294900a7e73146227023e7d31e18e7f50413cf3d8c7421a68dcdd5c946c152a3b0df6e830514f09327251bd187c64a697fbdb4ede6545c3297ec1a8c5b6be66b959383a9c52e7373ba3088dd58fcc1c80305d192bf9b2156a9f9b0e37897f7a7e933839274cdb999b9d762a4bc5387923093b7973b9e023ef7c1893dcaa81b0939112f636d6569f11199ec1c5bbcf57a584e0077dc3bf194b43e037dea37af0e29b23d23554bc54a01b5c9582a93ddd8f40181c847f1d01d7b8ff5e8371f2ce4938b74165a4800b67ebcda3160343e33fc35273ce94ef8ef8f6696a91c09fb1ec2ec0098b98ea53a3e4eecedd568d0111c6a04466202c04f1acd74bd37d7576457713c34d986f0647748ed9c52e92c977d9e57b49004f24a22c3b9a70ef5213366e2f820a57975acfa591904405b62fd914b79c92ae05af5b9e3a569471a47ae6abd98be133bbcd4e08cb231f87579db488b8a5c695251db8e3673b2e0ee518da7a95639e90e6a3b9d8a1b38f4603443d98b530ede22a5b56b258e71819d2818ce03d1e665a2f2ac1e9ebf87834fcab449498ebc441e626c5fe6651c19084a5eed990335b062c4c30940e3ec6927b3f9dbaf481fc4afcf09d3cf706e319f1744b140c1ae3a5fbd3aa97fd593f2d5deda9e708988ad7392a9b05b5d9f6ba1b860d0c397125fbfcdb28026fbed929204835c326d3b68c8b8e43fa2dbac4c7b96528c51c8539c2d4849f0e68a93e097cfe5d6543c5f11a565c3bf9d736eb9d4ef93fcdf64defa02f6ad27a9ab4896f04dbc116503caac19cb99f2f9640bd0d35f92207216a75e2a02a7501cce1715b63339a22a197f974409e225e84fe35fcb05c254f1bbf8edba5172559422768a47a26791a2e21b72fe7400b0e9da01471fe440d8decc5758ab6018db5a4ef73f72057311ddddc44128cc39a8f018412308daffd153f3bf76476a9c62af8d1a4ddd914355a93ac1cf98789c0ecb7a43b22f6f04d79eb060a0761ca105b39153b50ad46d7f517b50f3ecfc0bc62578b74a9e0b9e1c88a505b2acb9087d326dd1cabb56ee2b18437c75e658e5885774c296225ff408b700a9d296f7989ecf0f038ffd8d7d1e13b8ef30458dfdba1a05de743ed5ff28fff6b4606e92558618a62cf217d8e471c52b4794910f9d2cda450e673224faae3fda4080bfe58b54547520a4e94a5080b8b9ae</script></div><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
+      
+      
+      <categories>
+          
+          <category> 生活 </category>
+          
+          <category> 情感 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 个人感悟 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2020/03/05/hello-world/"/>
+      <url>/2020/03/05/hello-world/</url>
+      
+        <content type="html"><![CDATA[    <div id="aplayer-hTpaVreg" class="aplayer aplayer-tag-marker meting-tag-marker"         data-id="497572729" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#C20C0C"    ></div><p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 软件 </category>
+          
+          <category> 技术 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
